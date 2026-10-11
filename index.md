@@ -36,7 +36,7 @@ Something we use frequently in this book
 
 :::{card} Part 3 · Mathematics: Fundamentals of AI
 :link: part_3_math-fundamentals/index.md
-Core of a Linear Regression model is $y = \vec{w} . \vec{X} + b$ which is a line. Learning Math is important.
+Core of a Linear Regression model is $y = \vec{X} . \vec{w} + b$ which is a line. Learning Math is important.
 :::
 
 :::{card} Part 5 · Machine Learning
