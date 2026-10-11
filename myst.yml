@@ -25,6 +25,7 @@ project:
     '\R': '\mathbb{R}'
     '\E': '\mathbb{E}'
     '\vect': '\mathbf{#1}'
+
   # To autogenerate a Table of Contents, run "jupyter book init --write-toc"
 site:
   template: book-theme

@@ -39,6 +39,8 @@ jobs:
         run: npm install -g jupyter-book
       - name: Build HTML Assets
         run: jupyter-book build --html
+      - name: Add click-to-zoom to every page
+        run: python3 inject_zoom.py
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
@@ -46,5 +48,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
-
-

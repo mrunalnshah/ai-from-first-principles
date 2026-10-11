@@ -15,6 +15,10 @@ A heartfelt thank you to everyone who works to make quality education free. Ther
 ## Courses and lectures
 - **Andrew Ng**: [Machine Learning Specialization](https://www.coursera.org/specializations/machine-learning-introduction) 
 
+## Books
+- R. O. Duda, P. E. Hart, and D. G. Stork, Pattern classification, Second edition. New York: Wiley, 2001. [Online]. Available at: https://ebookcentral.proquest.com/lib/northeastern-ebooks/detail.action?docID=699526
+  
+
 ## Inspiration and tools
 - [Jupyter Book](https://jupyterbook.org) and [MyST](https://mystmd.org), which build this website
 - [Excalidraw](https://excalidraw.com), for the diagrams

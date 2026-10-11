@@ -271,3 +271,109 @@ html.dark :is(.article, article) mark {
 html.dark :is(img.invert-on-dark, .invert-on-dark img) {
   filter: invert(1) hue-rotate(180deg);
 }
+
+/* --------------------------------------------------------------------------
+   4. Click-to-zoom images (works with _static/zoom.js)
+   Paste this at the end of custom.css. Colors come from sections 1 and 2,
+   so the overlay is white in light mode and near-black in dark mode, and
+   your light/dark SVG variants stay readable.
+   -------------------------------------------------------------------------- */
+ 
+/* Show a magnifier cursor on images that can be enlarged */
+:is(.article, article) img:not(a img):not(.no-zoom):not(.no-zoom img) {
+  cursor: zoom-in;
+}
+ 
+/* The overlay: covers the whole window */
+.zoom-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  padding: max(3.5rem, env(safe-area-inset-top)) 1.5rem 1.5rem;
+  background: color-mix(in srgb, var(--myst-color-bg) 95%, transparent);
+  color: var(--myst-color-text);
+  cursor: zoom-out;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.zoom-dialog[open] {
+  display: flex;
+}
+.zoom-dialog::backdrop {
+  background: transparent;
+}
+ 
+/* The enlarged image: as big as fits, never stretched */
+.zoom-dialog .zoom-img {
+  flex: 1 1 0%;
+  min-height: 0;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: contain;
+  cursor: default;
+}
+ 
+/* Caption under the image (taken from the figure, if there is one) */
+.zoom-dialog .zoom-caption {
+  margin: 0;
+  max-width: 70ch;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--myst-color-text-secondary);
+  cursor: default;
+}
+ 
+/* The x button, top right */
+.zoom-dialog .zoom-close {
+  position: absolute;
+  top: max(0.75rem, env(safe-area-inset-top));
+  right: 0.75rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: 9999px;
+  border: 1px solid var(--myst-color-border-strong);
+  background: var(--myst-color-surface);
+  color: var(--myst-color-text);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.zoom-dialog .zoom-close:hover {
+  background: var(--myst-color-surface-hover);
+}
+.zoom-dialog .zoom-close:focus-visible {
+  outline: 2px solid var(--myst-color-link);
+  outline-offset: 2px;
+}
+ 
+/* Page behind the overlay doesn't scroll while it's open */
+html.zoom-open {
+  overflow: hidden;
+}
+ 
+/* A short fade in, skipped for readers who turn motion off */
+@media (prefers-reduced-motion: no-preference) {
+  .zoom-dialog[open] {
+    animation: zoom-fade 150ms ease-out;
+  }
+  .zoom-dialog[open] .zoom-img {
+    animation: zoom-grow 180ms ease-out;
+  }
+}
+@keyframes zoom-fade {
+  from { opacity: 0; }
+}
+@keyframes zoom-grow {
+  from { transform: scale(0.96); }
+}

@@ -29,14 +29,19 @@ I hope you learn something from them too.
 What intelligence is, and how machines learn. (To be published)
 :::
 
-:::{card} Part 2 · Mathematics: Fundamentals of AI
-:link: part_2_math-fundamentals/index.md
-Core of a Linear Regression model is y = wx + b which is a line. Learning Math is important.
+:::{card} Part 2 · Notations
+:link: part_2_notations/index.md
+Something we use frequently in this book
 :::
 
-:::{card} Part 3 · Machine Learning
-:link: part_3_machine-learning/index.md
-Learn Machine Learing
+:::{card} Part 3 · Mathematics: Fundamentals of AI
+:link: part_3_math-fundamentals/index.md
+Core of a Linear Regression model is $y = \vec{w} . \vec{X} + b$ which is a line. Learning Math is important.
+:::
+
+:::{card} Part 5 · Machine Learning
+:link: part_5_machine-learning/index.md
+Learn Machine Learing: Linear Regression, Logistic Regression, etc... from Scratch
 :::
 
 :::{card} New Chapters will be here!

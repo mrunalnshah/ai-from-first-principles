@@ -3,15 +3,24 @@ project:
   toc:
     - file: index.md
 
+    # Part 1 - Intro to Intelligence
     - file: part_1_intro-to-intelligence/index.md
       children:
         - file: part_1_intro-to-intelligence/chapter_1_what-is-intelligence/index.md
 
-    - file: part_2_math-fundamentals/index.md
+    # Part 2 - Notations
+    - file: part_2_notations/index.md
 
-    - file: part_3_machine-learning/index.md
+    # Part 3 - Math Fundamentals
+    - file: part_3_math-fundamentals/index.md
+
+    # Part 4 - Baysian Classifier
+
+    # Part 5 - Machine Learning
+    - file: part_5_machine-learning/index.md
       children:
-        - file: part_3_machine-learning/chapter_1_what-is-machine-learning/index.md
-        - file: part_3_machine-learning/chapter_2_intro-to-machine-learning/index.md
+        - file: part_5_machine-learning/chapter_1_what-is-machine-learning/index.md
+        - file: part_5_machine-learning/chapter_2_intro-to-machine-learning/index.md
+        - file: part_5_machine-learning/chapter_3_linear-regression/index.md
 
     - file: references.md
