@@ -823,87 +823,7 @@ To be more precise, this gradient descent process is called batch gradient desce
 
 
 ## Implementation Code
-``` python
-class LinearRegression:
-    def __init__(self, alpha=0.01, iteration=100000, convergence_limit=1e-8):
-        self.X = None
-        self.y = None
-        
-        self.m = None
-        
-        self.J_wb = float("inf")
-        
-        self.weight = 1
-        self.bias = 1
-        
-        self.alpha = alpha
-        self.iter = iteration
-        self.convergence_limit = convergence_limit
-
-    def _model(self, X):
-        y_hat = self.weight * X + self.bias
-
-        return y_hat
-
-    def _cost(self):
-        sum_error = 0
-
-        for i in range(self.m):
-            f_wb = self._model(self.X[i])
-            error = (f_wb - self.y[i]) ** 2
-
-            sum_error += error
-
-        J_wb = (1/(2 * self.m)) * sum_error
-
-        return J_wb
-        
-    def _gradient_function(self):
-        d_dw = 0
-        d_db = 0
-
-        for i in range(self.m):
-            error = (self._model(self.X[i]) - self.y[i])
-            d_dw += error * self.X[i]
-            d_db += error
-
-        d_dw = self.weight - self.alpha * (1 / self.m) * d_dw
-        d_db = self.bias - self.alpha * (1 / self.m) * d_db
-
-        return d_dw, d_db
-        
-    def _gradient_descent(self):
-        prev_cost = self.J_wb
-
-        for _ in range(self.iter):
-            self.weight, self.bias = self._gradient_function()
-            
-            cost = self._cost()
-            if prev_cost - cost <= self.convergence_limit:
-                break
-
-            prev_cost = cost
-        self.J_wb = prev_cost
-   
-    def fit(self, X, y):
-        self.X = X
-        self.y = y
-
-        if len(X) == len(y) and len(X) != 0:
-            self.m = len(X)
-        else:
-            raise ValueError("len(X) != len(y) or len(X) == 0")
-
-        self._gradient_descent()
-    
-    def predict(self, X):
-        print(self.weight, self.bias)
-
-        y_hat = self._model(X)
-
-        return y_hat
-```
-
+Look at [Lab: Linear Regression with One Feature](lab/linear-regression-with-one-feature.ipynb)
 
 # Linear Regression Model with Multiple Features
 Let's extend linear regression to handle multiple input features.
@@ -1421,24 +1341,8 @@ $$
 What we just did, creating a new feature is an example of what's called ***feature engineering***, in which you might use your knowledge or intuition about the problem to design new features usually by transforming or combining the original features of the problem in order to make it easier for the learning algorithm to make accurate predictions.
 
 # Full Implementation
-Review [libcode](https://github.com/mrunalnshah/ai-from-first-principles/tree/master/libcode) to see how to write modular ML code.
+Look at [Lab: Linear Regression with Multiple Feature](lab/linear-regression-with-multiple-feature.ipynb)
 
-# Polynomial Regression
-Polynomial regression will let you fit curves, non-linear functions, to your data.
-:::{figure}
-:label: ch03-38
-:no-subfigures:
-
-```{image} diagrams/0336-light.svg
-:alt: FIG
-:class: dark:hidden
-```
-
-```{image} diagrams/0336-dark.svg
-:alt: FIG
-:class: hidden dark:block
-```
-::: 
 
 # Summary
 Linear Regression is probably the single most widely used learning algorithm in the world today.
