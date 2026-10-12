@@ -16,6 +16,8 @@
    Theorem, lemma, conjecture .............. violet     light violet
    Corollary, criterion, property .......... orange     light orange
    Proof, algorithm, solution .............. gray       light gray
+   Notebook output (left rail) ............. gray       dark gray
+   Notebook error / stderr output .......... red/gold   red/gold
    Everything else ......................... black on white / white on black
 
    Every text color has at least 4.5:1 contrast with its background
@@ -104,6 +106,29 @@ html:root {
   --myst-color-proof: #737373;           /* proof, algorithm, solution */
   --myst-color-proof-bg: #f4f4f5;
   --myst-color-proof-text: #525252;
+
+  /* Notebook cells (used in section 5) */
+  --nb-font-mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", "Cascadia Code",
+                  Menlo, Consolas, "Liberation Mono", monospace;
+  --nb-code-bg: #f7f7f8;                 /* code cell input */
+  --nb-code-text: #18181b;
+  --nb-code-border: #e4e4e7;
+  --nb-output-rail: #d4d4d8;             /* thin bar left of every output */
+  --nb-error-bg: #fef2f2;                /* tracebacks */
+  --nb-error-rail: #dc2626;
+  --nb-stderr-bg: #fefce8;               /* warnings printed to stderr */
+  --nb-stderr-rail: #a16207;
+  --nb-plot-bg: #ffffff;                 /* behind plots and images in output */
+
+  /* Colored terminal text in outputs (ANSI), e.g. tracebacks */
+  --nb-ansi-black: #0a0a0a;
+  --nb-ansi-red: #b91c1c;
+  --nb-ansi-green: #166534;
+  --nb-ansi-yellow: #854d0e;
+  --nb-ansi-blue: #1d4ed8;
+  --nb-ansi-magenta: #a21caf;
+  --nb-ansi-cyan: #0e7490;
+  --nb-ansi-white: #52525b;
 }
 
 /* --------------------------------------------------------------------------
@@ -185,6 +210,26 @@ html.dark {
   --myst-color-proof: #8a8a8a;
   --myst-color-proof-bg: #1a1a1a;
   --myst-color-proof-text: #b5b5b5;
+
+  /* Notebook cells (used in section 5) */
+  --nb-code-bg: #181818;
+  --nb-code-text: #e4e4e7;
+  --nb-code-border: #2e2e2e;
+  --nb-output-rail: #3f3f46;
+  --nb-error-bg: #1f1616;
+  --nb-error-rail: #ef4444;
+  --nb-stderr-bg: #1c1a12;
+  --nb-stderr-rail: #eab308;
+  --nb-plot-bg: #ffffff;                 /* most plots are drawn for white paper */
+
+  --nb-ansi-black: #a1a1aa;
+  --nb-ansi-red: #fca5a5;
+  --nb-ansi-green: #86efac;
+  --nb-ansi-yellow: #fde047;
+  --nb-ansi-blue: #93c5fd;
+  --nb-ansi-magenta: #f0abfc;
+  --nb-ansi-cyan: #67e8f9;
+  --nb-ansi-white: #fafafa;
 }
 
 /* --------------------------------------------------------------------------
@@ -274,16 +319,15 @@ html.dark :is(img.invert-on-dark, .invert-on-dark img) {
 
 /* --------------------------------------------------------------------------
    4. Click-to-zoom images (works with _static/zoom.js)
-   Paste this at the end of custom.css. Colors come from sections 1 and 2,
-   so the overlay is white in light mode and near-black in dark mode, and
-   your light/dark SVG variants stay readable.
+   Colors come from sections 1 and 2, so the overlay is white in light mode
+   and near-black in dark mode, and your light/dark SVG variants stay readable.
    -------------------------------------------------------------------------- */
- 
+
 /* Show a magnifier cursor on images that can be enlarged */
 :is(.article, article) img:not(a img):not(.no-zoom):not(.no-zoom img) {
   cursor: zoom-in;
 }
- 
+
 /* The overlay: covers the whole window */
 .zoom-dialog {
   position: fixed;
@@ -310,7 +354,7 @@ html.dark :is(img.invert-on-dark, .invert-on-dark img) {
 .zoom-dialog::backdrop {
   background: transparent;
 }
- 
+
 /* The enlarged image: as big as fits, never stretched */
 .zoom-dialog .zoom-img {
   flex: 1 1 0%;
@@ -321,7 +365,7 @@ html.dark :is(img.invert-on-dark, .invert-on-dark img) {
   object-fit: contain;
   cursor: default;
 }
- 
+
 /* Caption under the image (taken from the figure, if there is one) */
 .zoom-dialog .zoom-caption {
   margin: 0;
@@ -331,7 +375,7 @@ html.dark :is(img.invert-on-dark, .invert-on-dark img) {
   color: var(--myst-color-text-secondary);
   cursor: default;
 }
- 
+
 /* The x button, top right */
 .zoom-dialog .zoom-close {
   position: absolute;
@@ -356,12 +400,12 @@ html.dark :is(img.invert-on-dark, .invert-on-dark img) {
   outline: 2px solid var(--myst-color-link);
   outline-offset: 2px;
 }
- 
+
 /* Page behind the overlay doesn't scroll while it's open */
 html.zoom-open {
   overflow: hidden;
 }
- 
+
 /* A short fade in, skipped for readers who turn motion off */
 @media (prefers-reduced-motion: no-preference) {
   .zoom-dialog[open] {
@@ -376,4 +420,273 @@ html.zoom-open {
 }
 @keyframes zoom-grow {
   from { transform: scale(0.96); }
+}
+
+/* --------------------------------------------------------------------------
+   5. Jupyter notebooks: code cells, outputs, tables, plots
+
+   The look:
+     input   a light gray box with a thin border (dark gray in dark mode)
+     output  plain page background with a thin gray bar on its left,
+             so you can tell at a glance what is code and what is result
+     error   same bar in red on a faint red tint
+     stderr  same bar in gold on a faint yellow tint
+
+   The theme marks notebook outputs differently across versions, so the
+   output rules below use a list of selectors. Only the ones that exist in
+   your build do anything. If outputs show no gray bar, open the page in
+   your browser, right-click an output > Inspect, and add the class or
+   data- attribute you see on its wrapper to each  :is( ... )  list
+   marked  OUTPUT WRAPPER.
+   -------------------------------------------------------------------------- */
+
+/* 5.1 Code cell input (also styles ordinary ``` code fences) ------------- */
+
+/* The code highlighter writes its own background and padding inline on
+   <pre>, so these two lines need !important to win. */
+:is(.article, article) pre {
+  background-color: var(--nb-code-bg) !important;
+  padding: 0.85em 1em !important;
+  color: var(--nb-code-text);
+  border: 1px solid var(--nb-code-border);
+  border-radius: 6px;
+  font-family: var(--nb-font-mono);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  tab-size: 4;
+  font-variant-ligatures: none;   /* show != and -> as typed */
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--myst-color-border-strong) transparent;
+}
+:is(.article, article) pre code {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+/* Drop the theme's drop shadow around code boxes for a flatter look */
+:is(.article, article) div:has(> pre) {
+  box-shadow: none;
+  background-color: transparent;
+}
+
+/* 5.2 Output area -------------------------------------------------------- */
+
+/* OUTPUT WRAPPER */
+:is(.article, article) :is(
+  [data-name="outputs-container"],
+  [data-mdast-node-type="outputs"],
+  [data-mdast-node-type="output"],
+  .myst-jp-outputs,
+  .myst-jp-output,
+  .jupyter-output
+) {
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0.25rem 0 0.25rem 1rem;
+  border-left: 3px solid var(--nb-output-rail);
+  overflow-x: auto;               /* wide tables scroll inside the output */
+}
+
+/* An output inside an output wrapper doesn't get a second bar */
+:is(.article, article) :is(
+  [data-name="outputs-container"],
+  [data-mdast-node-type="outputs"],
+  .myst-jp-outputs
+) :is(
+  [data-mdast-node-type="output"],
+  .myst-jp-output,
+  .jupyter-output
+) {
+  margin: 0;
+  padding: 0;
+  border-left: 0;
+}
+
+/* Printed text in an output: no box, just the text */
+/* OUTPUT WRAPPER */
+:is(.article, article) :is(
+  [data-name="outputs-container"],
+  [data-mdast-node-type="outputs"],
+  [data-mdast-node-type="output"],
+  .myst-jp-outputs,
+  .myst-jp-output,
+  .jupyter-output
+) pre {
+  background-color: transparent !important;
+  padding: 0.15em 0 !important;
+  border: 0;
+  border-radius: 0;
+  max-height: 32rem;              /* very long logs scroll instead of filling the page */
+  overflow-y: auto;
+}
+
+/* Errors (tracebacks): red bar on a faint red tint */
+/* OUTPUT WRAPPER */
+:is(.article, article) :is(
+  [data-name="outputs-container"],
+  [data-mdast-node-type="outputs"],
+  [data-mdast-node-type="output"],
+  .myst-jp-outputs,
+  .myst-jp-output,
+  .jupyter-output
+):has([class*="error"], .ansi-red-fg, .ansi-red-intense-fg) {
+  border-left-color: var(--nb-error-rail);
+  background-color: var(--nb-error-bg);
+  padding-right: 0.75rem;
+  border-radius: 0 6px 6px 0;
+}
+
+/* Warnings printed to stderr: gold bar on a faint yellow tint */
+/* OUTPUT WRAPPER */
+:is(.article, article) :is(
+  [data-name="outputs-container"],
+  [data-mdast-node-type="outputs"],
+  [data-mdast-node-type="output"],
+  .myst-jp-outputs,
+  .myst-jp-output,
+  .jupyter-output
+):has([class*="stderr"]):not(:has([class*="error"], .ansi-red-fg)) {
+  border-left-color: var(--nb-stderr-rail);
+  background-color: var(--nb-stderr-bg);
+  padding-right: 0.75rem;
+  border-radius: 0 6px 6px 0;
+}
+
+/* 5.3 Colored terminal text (ANSI) in outputs ---------------------------- */
+:is(.article, article) :is(.ansi-black-fg, .ansi-black-intense-fg)     { color: var(--nb-ansi-black); }
+:is(.article, article) :is(.ansi-red-fg, .ansi-red-intense-fg)         { color: var(--nb-ansi-red); }
+:is(.article, article) :is(.ansi-green-fg, .ansi-green-intense-fg)     { color: var(--nb-ansi-green); }
+:is(.article, article) :is(.ansi-yellow-fg, .ansi-yellow-intense-fg)   { color: var(--nb-ansi-yellow); }
+:is(.article, article) :is(.ansi-blue-fg, .ansi-blue-intense-fg)       { color: var(--nb-ansi-blue); }
+:is(.article, article) :is(.ansi-magenta-fg, .ansi-magenta-intense-fg) { color: var(--nb-ansi-magenta); }
+:is(.article, article) :is(.ansi-cyan-fg, .ansi-cyan-intense-fg)       { color: var(--nb-ansi-cyan); }
+:is(.article, article) :is(.ansi-white-fg, .ansi-white-intense-fg)     { color: var(--nb-ansi-white); }
+:is(.article, article) .ansi-bold      { font-weight: 700; }
+:is(.article, article) .ansi-underline { text-decoration: underline; }
+
+/* Colored backgrounds in tracebacks become a soft highlight that keeps
+   the text readable in both themes */
+:is(.article, article) [class*="ansi-"][class*="-bg"] {
+  background-color: color-mix(in srgb, currentColor 14%, transparent);
+  border-radius: 2px;
+}
+
+/* 5.4 pandas DataFrames -------------------------------------------------- */
+/* Clean "booktabs" style: rules between rows only, numbers lined up on
+   the right, index column in bold on the left. Overrides section 3. */
+:is(.article, article) table.dataframe {
+  border: 0;
+  border-collapse: collapse;
+  width: auto;
+  margin: 0.25rem 0;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+:is(.article, article) table.dataframe :is(th, td) {
+  border: 0;
+  border-bottom: 1px solid var(--myst-color-border);
+  padding: 0.35em 0.75em;
+  text-align: right;
+  white-space: nowrap;
+}
+:is(.article, article) table.dataframe thead th {
+  background-color: transparent;
+  color: var(--myst-color-text);
+  font-weight: 600;
+  vertical-align: bottom;
+  border-bottom: 2px solid var(--myst-color-border-strong);
+}
+:is(.article, article) table.dataframe tbody th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--myst-color-text);
+}
+:is(.article, article) table.dataframe tbody tr:hover {
+  background-color: var(--myst-color-active-bg);
+}
+
+/* 5.5 Plots and images in outputs ---------------------------------------- */
+/* OUTPUT WRAPPER */
+:is(.article, article) :is(
+  [data-name="outputs-container"],
+  [data-mdast-node-type="outputs"],
+  [data-mdast-node-type="output"],
+  .myst-jp-outputs,
+  .myst-jp-output,
+  .jupyter-output
+) :is(img, svg, iframe) {
+  max-width: 100%;
+  height: auto;
+}
+:is(.article, article) :is(
+  [data-name="outputs-container"],
+  [data-mdast-node-type="outputs"],
+  [data-mdast-node-type="output"],
+  .myst-jp-outputs,
+  .myst-jp-output,
+  .jupyter-output
+) iframe {
+  border: 0;
+}
+
+/* Matplotlib and most plotting libraries draw black text for white paper.
+   In dark mode, plots sit on a white card so axis labels stay readable.
+   If your plots are already styled for dark backgrounds, delete this rule. */
+/* OUTPUT WRAPPER */
+html.dark :is(.article, article) :is(
+  [data-name="outputs-container"],
+  [data-mdast-node-type="outputs"],
+  [data-mdast-node-type="output"],
+  .myst-jp-outputs,
+  .myst-jp-output,
+  .jupyter-output
+) img:not(.invert-on-dark) {
+  background-color: var(--nb-plot-bg);
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+/* 5.6 Small screens ------------------------------------------------------ */
+@media (max-width: 640px) {
+  :is(.article, article) pre {
+    font-size: 0.8rem;
+    border-radius: 4px;
+  }
+  /* OUTPUT WRAPPER */
+  :is(.article, article) :is(
+    [data-name="outputs-container"],
+    [data-mdast-node-type="outputs"],
+    [data-mdast-node-type="output"],
+    .myst-jp-outputs,
+    .myst-jp-output,
+    .jupyter-output
+  ) {
+    padding-left: 0.6rem;
+  }
+}
+
+/* 5.7 Printing and PDF from the browser ---------------------------------- */
+@media print {
+  :is(.article, article) pre {
+    white-space: pre-wrap;        /* long lines wrap instead of being cut off */
+    max-height: none;
+    overflow: visible;
+    break-inside: avoid;
+  }
+  /* OUTPUT WRAPPER */
+  :is(.article, article) :is(
+    [data-name="outputs-container"],
+    [data-mdast-node-type="outputs"],
+    [data-mdast-node-type="output"],
+    .myst-jp-outputs,
+    .myst-jp-output,
+    .jupyter-output
+  ) {
+    break-inside: avoid;
+    overflow: visible;
+  }
 }

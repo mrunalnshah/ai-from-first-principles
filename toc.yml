@@ -22,5 +22,8 @@ project:
         - file: part_5_machine-learning/chapter_1_what-is-machine-learning/index.md
         - file: part_5_machine-learning/chapter_2_intro-to-machine-learning/index.md
         - file: part_5_machine-learning/chapter_3_linear-regression/index.md
+          children:
+            - file: part_5_machine-learning/chapter_3_linear-regression/lab/linear-regression-with-one-feature.ipynb
+            - file: part_5_machine-learning/chapter_3_linear-regression/lab/linear-regression-with-multiple-feature.ipynb
 
     - file: references.md
