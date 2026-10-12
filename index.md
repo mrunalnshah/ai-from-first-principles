@@ -21,6 +21,8 @@ I hope you learn something from them too.
 \- Mrunal Nirajkumar Shah (\@mrunalnshah)
 :::
 
+You can refer to labs related to each chapter, or you can see how to write the models in more modular way: [GitHub](https://github.com/mrunalnshah/ai-from-first-principles/tree/master/libcode)
+
 **Table of Content:**
 ::::{grid} 1 1 1 1
 

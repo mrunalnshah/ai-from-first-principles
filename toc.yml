@@ -25,5 +25,6 @@ project:
           children:
             - file: part_5_machine-learning/chapter_3_linear-regression/lab/linear-regression-with-one-feature.ipynb
             - file: part_5_machine-learning/chapter_3_linear-regression/lab/linear-regression-with-multiple-feature.ipynb
+        - file: part_5_machine-learning/chapter_4_polynomial-regression/index.md
 
     - file: references.md
