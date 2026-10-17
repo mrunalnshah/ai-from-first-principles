@@ -823,7 +823,7 @@ To be more precise, this gradient descent process is called batch gradient desce
 
 
 ## Implementation Code
-Look at [Lab: Linear Regression with One Feature](lab/linear-regression-with-one-feature.ipynb)
+Look at [Lab: Linear Regression with One Feature](lab/linear-regression-with-one-feature.ipynb)	
 
 # Linear Regression Model with Multiple Features
 Let's extend linear regression to handle multiple input features.

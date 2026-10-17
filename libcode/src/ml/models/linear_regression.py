@@ -113,9 +113,3 @@ class LinearRegression:
         y_hat = self._model(X)
 
         return y_hat
-
-def main():
-    ...
-
-if __name__ == "__main__":
-    main()

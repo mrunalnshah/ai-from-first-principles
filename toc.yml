@@ -26,5 +26,8 @@ project:
             - file: part_5_machine-learning/chapter_3_linear-regression/lab/linear-regression-with-one-feature.ipynb
             - file: part_5_machine-learning/chapter_3_linear-regression/lab/linear-regression-with-multiple-feature.ipynb
         - file: part_5_machine-learning/chapter_4_polynomial-regression/index.md
-
+        - file: part_5_machine-learning/chapter_5_logistic-regression/index.md
+        - file: part_5_machine-learning/chapter_6_fit-the-data-well/index.md
+        - file: part_5_machine-learning/chapter_7_neural-networks/index.md
+        
     - file: references.md
