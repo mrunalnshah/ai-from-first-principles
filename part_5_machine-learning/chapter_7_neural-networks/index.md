@@ -710,3 +710,164 @@ You can also write this output as $f(\vec{x})$. Recall that in linear regression
 Because this computation goes from left to right, starting from $\vec{x}$ and computing $\vec{a}^{[1]}$, then $\vec{a}^{[2]}$, then $a^{[3]}$, this algorithm is called forward propagation: you're propagating the activations of the neurons in the forward direction.
 
 This is in contrast to a different algorithm, called backward propagation or backpropagation, which is used for learning.
+
+## TensorFlow Implementation (Forward Propagation)
+TensorFlow is one of the leading frameworks for implementing deep learning algorithms; PyTorch is another popular one. To learn more, check out the TensorFlow tutorials. 
+
+Let's look at how to write inference code in TensorFlow.
+
+**One of the remarkable things about neural networks is that the same algorithm can be applied to so many different applications.**
+
+### Example - Coffee Roasting
+Can a learning algorithm help optimize the quality of the beans you get from a roasting process? When roasting coffee, you control two parameters: the temperature at which you heat the raw beans, and the duration, or how long you roast them.
+
+In this slightly simplified example, we've created a dataset of different temperatures and durations, along with labels showing whether the roasted coffee tasted good. In the figure below, red crosses ($y = 1$) mark good coffee and blue circles ($y = 0$) mark bad coffee.
+
+:::{figure}
+:label: ch07-29
+:no-subfigures:
+
+```{image} diagrams/29-light.svg
+:alt: coffee-roasting-data
+:class: dark:hidden
+```
+
+```{image} diagrams/29-dark.svg
+:alt: coffee-roasting-data
+:class: hidden dark:block
+```
+:::
+
+Here's a reasonable way to think about this dataset:
+- If you roast the beans at too low a temperature, they don't roast properly and end up undercooked.
+- If you don't roast them long enough (the duration is too short), they also don't come out nicely roasted.
+- If you roast them for too long or at too high a temperature, they end up overcooked and a little burnt, which isn't good coffee either.
+
+:::{figure}
+:label: ch07-30
+:no-subfigures:
+
+```{image} diagrams/30-light.svg
+:alt: coffee-roasting
+:class: dark:hidden
+```
+
+```{image} diagrams/30-dark.svg
+:alt: coffee-roasting
+:class: hidden dark:block
+```
+:::
+
+***Only the points inside the small triangle correspond to good coffee.***
+
+This example is a simplified version of real coffee roasting.
+
+#### Task
+Given a feature vector `x` containing both temperature and duration (say, 200 °C for 17 minutes), how can we run inference in a neural network so that it tells us whether this setting will result in good coffee?
+
+:::{figure}
+:label: ch07-31
+:no-subfigures:
+
+```{image} diagrams/31-light.svg
+:alt: nn-coffee-roasting
+:class: dark:hidden
+```
+
+```{image} diagrams/31-dark.svg
+:alt: nn-coffee-roasting
+:class: hidden dark:block
+```
+:::
+
+First, set `x` to an array of two numbers: the input features, 200 °C and 17 minutes. Then create Layer 1, the first hidden layer of the network, as `Dense(units=3, activation='sigmoid')`. This means the layer has three hidden units and uses the sigmoid activation function. *Dense* is another name for the type of layer we've learned about so far. As you learn more about neural networks, you'll learn about other types of layers too, but for now we'll use dense layers for all of our examples.
+
+Next, compute `a1` by applying Layer 1, which is actually a function, to `x`. Because Layer 1 has three units, `a1` is a list of three numbers; for illustration, it might be 0.2, 0.7, and 0.3.
+
+Next, create Layer 2, the output layer. It's also a dense layer, this time with one unit and, again, a sigmoid activation function. Compute `a2` by applying Layer 2 to the activations from Layer 1, `a1`. For illustration, `a2` might be 0.8.
+
+Finally, if you want to threshold the output at 0.5, check whether `a2` is greater than or equal to 0.5 and set `yhat` to 1 (positive class) or 0 (negative class) accordingly.
+
+That's how you run inference in a neural network using TensorFlow. There are some additional details I didn't cover here, such as how to import the TensorFlow library and how to load the network's parameters $w$ and $b$. But these are the key steps of forward propagation: computing `a1` and `a2`, and optionally thresholding `a2`.
+
+``` python
+# Input Feature
+x = np.array([200.0, 17.0])
+
+# Create Layer 1
+layer_1 = Dense(units=3, activation='sigmoid')
+
+# Calculate a1
+a1 = layer_1(x)
+
+# Create Layer 2
+layer_2 = Dense(units=1, activation='sigmoid')
+
+# Calculate a2
+a2 = layer_2(a1)
+
+# Threshold a2
+if a2 >= 0.5:
+  yhat = 1
+else:
+  yhat = 0
+```
+
+### Example - Handwritten Digit Classification
+In this example, the input `x` is a list of pixel intensity values, stored as a NumPy array.
+
+:::{figure}
+:label: ch07-27
+:no-subfigures:
+
+```{image} diagrams/27-light.svg
+:alt: Step 4 - Threshold
+:class: dark:hidden
+```
+
+```{image} diagrams/27-dark.svg
+:alt: Step 4 - Threshold
+:class: hidden dark:block
+```
+:::
+
+To set up and run the first step of forward propagation, create Layer 1 as a dense layer with 25 units and a sigmoid activation function, then compute `a1` by applying Layer 1 to `x`. The second layer works the same way: create Layer 2 as a dense layer with 15 units, then compute `a2` by applying Layer 2 to `a1`. Layer 3 is the third and final dense layer, with a single unit; applying it to `a2` gives `a3`. Finally, you can optionally threshold `a3` to get a binary prediction, `yhat`.
+
+That's the syntax for carrying out inference in TensorFlow.
+``` python
+# Input feature
+x = np.array([0, ..., 245, ..., 240, ... 0])
+
+# Create Layer 1
+layer_1 = Dense(units=25, activation='sigmoid')
+
+# Calculate a1
+a1 = layer_1(x)
+
+# Create Layer 2
+layer_2 = Dense(units=15, activation='sigmoid')
+
+# Calculate a2
+a2 = layer_2(a1)
+
+# Create Layer 3
+layer_3 = Dense(units=1, activation='sigmoid')
+
+# Calculate a3
+a3 = layer_3(a2)
+
+# Threshold a3
+if a3 >= 0.5:
+  yhat = 1
+else:
+  yhat = 0
+```
+
+
+:::{note}
+One thing I only touched on briefly is the structure of the NumPy arrays. TensorFlow treats data in a particular way, and it's important to get it right.
+:::
+
+Next, let's look at how TensorFlow handles data.
+
+## Data in TensorFlow
