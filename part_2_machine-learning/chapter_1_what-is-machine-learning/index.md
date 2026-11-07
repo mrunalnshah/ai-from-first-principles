@@ -48,11 +48,11 @@ Most of the really exciting problems are a different story. Nobody knew how to w
 For problems like these, there was only one option left: stop trying to write the instructions ourselves and let the machine learn the task *by itself*.
 :::
 
-## The Long-Term Dream: Artificial General Intelligence
+## The Long-Term Dream: Super Intelligence
 
-Further in the future lies one of AI's biggest dreams: machines that can think as well as people do. This goal is called **artificial general intelligence (AGI)**, and like many people, I find it exciting.
+Further in the future lies one of AI's biggest dreams: machines that can think as well as people do. This goal is called **Super Intelligence (SI)**, and like many people, I find it exciting.
 
-Even so, I think AGI is getting far more hype than it deserves. We are nowhere close to building it yet. Will we get there in 50 years? 500? Even longer? I honestly don't know.
+Even so, I think SI is getting far more hype than it deserves. We are nowhere close to building it yet. Will we get there in 50 years? 500? Even longer? I honestly don't know.
 
 Most AI researchers believe, though, that **learning algorithms** are the most promising path toward it. And when it comes to designing those algorithms, perhaps the best place to look for inspiration is the brain itself, especially the human brain!
 
