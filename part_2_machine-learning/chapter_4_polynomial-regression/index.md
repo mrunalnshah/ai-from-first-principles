@@ -7,7 +7,13 @@ numbering:
 ---
 
 # Polynomial Regression
-Polynomial regression will let you fit curves, non-linear functions, to your data.
+
+:::{prf:definition} Polynomial Regression
+:label: def-polynomial-regression
+
+**Polynomial regression** is a form of regression that can fit curved, non-linear functions to data, rather than only straight lines.
+:::
+
 :::{figure}
 :label: ch04-01
 :no-subfigures:
@@ -21,4 +27,4 @@ Polynomial regression will let you fit curves, non-linear functions, to your dat
 :alt: FIG
 :class: hidden dark:block
 ```
-::: 
+:::

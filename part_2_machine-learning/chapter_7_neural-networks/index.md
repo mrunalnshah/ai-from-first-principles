@@ -817,7 +817,7 @@ else:
 In this example, the input `x` is a list of pixel intensity values, stored as a NumPy array.
 
 :::{figure}
-:label: ch07-27
+:label: ch07-32
 :no-subfigures:
 
 ```{image} diagrams/27-light.svg
