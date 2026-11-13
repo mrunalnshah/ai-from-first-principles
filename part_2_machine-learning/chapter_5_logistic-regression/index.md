@@ -5,13 +5,52 @@ date: 2026-10-17
 numbering:
   enumerator: 5.%s
 ---
-
 In this chapter, we will learn how to predict categories using the logistic regression model.
 
 In classification, which is what logistic regression is for, the output variable $y$ can take only one of a small handful of possible values, rather than any number from an infinite range. That's why linear regression turns out to be a poor algorithm for classification problems, as we'll see.
+# Architecture
+
+:::{figure}
+:label: 00.Architecture
+:no-subfigures:
+
+```{image} diagrams/17-light.svg
+:alt: Architecture
+:class: dark:hidden
+```
+
+```{image} diagrams/17-dark.svg
+:alt: Architecture
+:class: hidden dark:block
+```
+:::
+
+## Model
+$$
+g(z) = \frac{1}{1 + e^{-(z)}}
+$$
+where,
+$$
+z = f_{\vec{w}, b} (\vec{X}) = \vec{X} \cdot \vec{w} + b
+$$
+
+## Cost Function
+$$
+J(\vec{w}, b) =  \sum_{i=1}^{m} \frac{1}{m} -y^{(i)} log(f_{\vec{w}, b}(X^{(i)})) - (1 - y^{(i)}) log(1 - f_{\vec{w}, b}(X^{(i)}))
+$$
+
+## Gradient Descent
+$$
+\begin{aligned}
+& \text{repeat until convergence } \{ \\
+& w = w - \alpha \frac{1}{m}\sum_{i=1}^{m} (f_{w,b}(x^{(i)}) - y^{(i)}) x^{(i)} \\
+& b = b - \alpha \frac{1}{m}\sum_{i=1}^{m} (f_{w,b}(x^{(i)}) - y^{(i)}) \\
+& \}
+\end{aligned}
+$$
+
 
 # Classification Problem
-
 Here are a few examples of classification problems:
 
 :::{table} Examples of binary classification problems

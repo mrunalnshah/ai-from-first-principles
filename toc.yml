@@ -21,6 +21,8 @@ project:
           children:
             - file: part_2_machine-learning/chapter_4_polynomial-regression/lab/polynomial-regression.ipynb
         - file: part_2_machine-learning/chapter_5_logistic-regression/index.md
+          children:
+            - file: part_2_machine-learning/chapter_5_logistic-regression/lab/Logistic-Regression.ipynb
         - file: part_2_machine-learning/chapter_6_fit-the-data-well/index.md
         - file: part_2_machine-learning/chapter_7_neural-networks/index.md
 
@@ -31,3 +33,5 @@ project:
     - file: part_0_Appendix/index.md
 
     - file: references.md
+
+    
