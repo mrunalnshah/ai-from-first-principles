@@ -36,7 +36,7 @@ $$
 
 ## Cost Function
 $$
-J(\vec{w}, b) =  \sum_{i=1}^{m} \frac{1}{m} -y^{(i)} log(f_{\vec{w}, b}(X^{(i)})) - (1 - y^{(i)}) log(1 - f_{\vec{w}, b}(X^{(i)}))
+J(\vec{w}, b) =  \sum_{i=1}^{m} \frac{1}{m} (-y^{(i)} log(f_{\vec{w}, b}(X^{(i)})) - (1 - y^{(i)}) log(1 - f_{\vec{w}, b}(X^{(i)})))
 $$
 
 ## Gradient Descent
